@@ -24,6 +24,7 @@ public class Jogo extends JPanel implements ActionListener {
 
 	private Timer timer;
 	private Nave nave;
+	
 
 	private int score = 0;
 
@@ -32,6 +33,8 @@ public class Jogo extends JPanel implements ActionListener {
 	private Random random = new Random();
 
 	private boolean endgame = false;
+
+	private int LOST_PETS = 0;
 
 	private final int DELAY = 10;
 
@@ -60,6 +63,8 @@ public class Jogo extends JPanel implements ActionListener {
 		g.setColor(Color.black);
 		g.setFont(small);
 		g.drawString(msg, (B_WIDTH - fm.stringWidth(msg)) / 2, B_HEIGHT / 2);
+		ImageIcon gameover = new ImageIcon(this.getClass().getResource("/imagens/gameover.png"));
+		g.drawImage(gameover.getImage(), 0, 0, null);
 	}
 
 	@Override
@@ -74,25 +79,28 @@ public class Jogo extends JPanel implements ActionListener {
 	}
 
 	private void desenhar(Graphics g) {
-        ImageIcon img = new ImageIcon(this.getClass().getResource("/imagens/background.jpg"));
-        g.drawImage(img.getImage(), 0, 0, null);
-        if(nave.getX() < 0) {
-        	g.drawImage(nave.getImage(), 10, 430, this);
-        }else {
-        	g.drawImage(nave.getImage(), nave.getX(), 430, this);
-        }
+		ImageIcon img = new ImageIcon(this.getClass().getResource("/imagens/background.jpg"));
+		ImageIcon logo = new ImageIcon(this.getClass().getResource("/imagens/logo.png"));
+		g.drawImage(img.getImage(), 0, 0, null);
+		if (nave.getX() < 0) {
+			g.drawImage(nave.getImage(), 10, 430, this);
+		} else {
+			g.drawImage(nave.getImage(), nave.getX(), 430, this);
+		}
 
 		for (Pets i : pets) {
 			if (i.isVisible()) {
-				if(i.getX() > 720) {
+				if (i.getX() > 720) {
 					g.drawImage(i.getImage(), 720, i.getY(), this);
-				}else {
+				} else {
 					g.drawImage(i.getImage(), i.getX(), i.getY(), this);
 				}
 			}
 		}
 		g.setColor(Color.white);
-		g.drawString("PONTOS : " + score, 5, 15);
+		g.drawImage(logo.getImage(), 5, 0, null);
+		g.drawString("Save Pets : " + score, 700, 15);
+		g.drawString("Lost Pets : " + LOST_PETS, 700, 30);
 
 	}
 
@@ -106,14 +114,22 @@ public class Jogo extends JPanel implements ActionListener {
 	}
 
 	public void checkCollisions() {
-		Rectangle r3 = nave.getBounds();
-		for (Pets pet : pets) {
-			Rectangle r2 = pet.getBounds();
-			if (r3.intersects(r2)) {
-				pet.setVisible(false);
-				score++;
-				if(score > 100) {
-					endgame = true;
+		if (LOST_PETS > 20) {
+			endgame = true;
+		} else {
+			Rectangle r3 = nave.getBounds(true);
+			for (Pets pet : pets) {
+				if (pet.getY() > 400) {
+					LOST_PETS++;
+					pet.setVisible(false);
+				}
+				Rectangle r2 = pet.getBounds(false);
+				if (r3.intersects(r2)) {
+					pet.setVisible(false);
+					score++;
+					if (score > 100) {
+						endgame = true;
+					}
 				}
 			}
 		}
@@ -121,7 +137,7 @@ public class Jogo extends JPanel implements ActionListener {
 
 	private void updateInimigo() {
 		while (pets.size() < 5) {
-			pets.add(new Pets(random.nextInt(B_WIDTH) + 10, 0 ));
+			pets.add(new Pets(random.nextInt(B_WIDTH) + 10, 0));
 		}
 
 		for (int i = 0; i < pets.size(); i++) {

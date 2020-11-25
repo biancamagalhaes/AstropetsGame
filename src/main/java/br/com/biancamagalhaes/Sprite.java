@@ -56,7 +56,10 @@ public class Sprite {
 		this.visibilty = visible;
 	}
 
-	public Rectangle getBounds() {
+	public Rectangle getBounds(Boolean isNave) {
+		if(isNave) {
+			return new Rectangle(x, 430, width, height);
+		}
 		return new Rectangle(x, y, width, height);
 	}
 }
