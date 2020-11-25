@@ -1,6 +1,6 @@
 ![alt text](https://github.com/biancamagalhaes/AstropetsGame/blob/main/src/main/resources/imagens/logo2.jpeg?raw=true)
 
-Some puppys are lost in the space and you is the choosed for collect them and got them back to the earth, that's your mission astronaut! 
+Some puppys are lost in the space and you is the choosed for collect them and got them back to the earth, that's your mission capitain! 
 
 ## How to play
 Make download of the repositorie and run as a Java Aplication the branch main in your favorite java envoriment.
